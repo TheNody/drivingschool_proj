@@ -24,7 +24,7 @@ import com.example.drivingschool76.components.ManagerBottomBar
 import com.example.drivingschool76.components.NavDrawer
 import com.example.drivingschool76.data.viewmodel.LoginViewModel
 import com.example.drivingschool76.data.viewmodel.UserRoleState
-import com.example.drivingschool76.utils.SUPPORT_SCREEN_FOR_INSTRUCTOR
+import com.example.drivingschool76.utils.MANAGER_SCREEN
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,7 +76,7 @@ fun SupportScreenForManager(
             ) {
                 Text(
                     modifier = modifier.align(alignment = Alignment.Center),
-                    text = SUPPORT_SCREEN_FOR_INSTRUCTOR
+                    text = MANAGER_SCREEN
                 )
             }
         }

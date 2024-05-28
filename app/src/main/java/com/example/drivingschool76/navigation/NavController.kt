@@ -29,7 +29,6 @@ import com.example.drivingschool76.screens.CategoryBMechanicScreen
 import com.example.drivingschool76.screens.ChatScreen
 import com.example.drivingschool76.screens.HomeScreen
 import com.example.drivingschool76.screens.LoginScreen
-import com.example.drivingschool76.screens.ManagerScreen
 import com.example.drivingschool76.screens.NotificationScreen
 import com.example.drivingschool76.screens.SettingsScreen
 import com.example.drivingschool76.screens.ShoppingCartScreen
@@ -40,6 +39,7 @@ import com.example.drivingschool76.screens.instructorscreens.InformationCarScree
 import com.example.drivingschool76.screens.instructorscreens.MainScreenInstructor
 import com.example.drivingschool76.screens.instructorscreens.MessagesANDCommunicationsScreenInstructor
 import com.example.drivingschool76.screens.instructorscreens.ProfilesStudentsInstructorScreen
+import com.example.drivingschool76.screens.managerscreens.ManagerScreen
 
 @Composable
 fun NavController(

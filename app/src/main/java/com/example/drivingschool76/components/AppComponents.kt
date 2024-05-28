@@ -4,6 +4,7 @@
 
 package com.example.drivingschool76.components
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -46,6 +47,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -100,6 +102,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -174,8 +177,12 @@ import com.example.drivingschool76.ui.theme.DarkBorderColor
 import com.example.drivingschool76.ui.theme.DarkRedColor
 import com.example.drivingschool76.ui.theme.SelectedBlue
 import com.example.drivingschool76.utils.ACCOUNT_SCREEN
+import com.example.drivingschool76.utils.Appointment
 import com.example.drivingschool76.utils.AuthTokenManager
 import com.example.drivingschool76.utils.CALENDAR_INSTRUCTOR_DESTINATION_SCREEN
+import com.example.drivingschool76.utils.CHAT_SCREEN
+import com.example.drivingschool76.utils.DailyAppointments
+import com.example.drivingschool76.utils.DatePickerClass
 import com.example.drivingschool76.utils.HOME_SCREEN
 import com.example.drivingschool76.utils.INFORMATION_ABOUT_CAR_SCREEN
 import com.example.drivingschool76.utils.LOGIN_SCREEN
@@ -183,7 +190,6 @@ import com.example.drivingschool76.utils.MAIN_SCREEN_INSTRUCTOR_SCREEN
 import com.example.drivingschool76.utils.MESSAGES_AND_COMMUNICATION_INSTRUCTOR_SCREEN
 import com.example.drivingschool76.utils.NOTIFICATION_SCREEN
 import com.example.drivingschool76.utils.PROFILES_STUDENTS_INSTRUCTOR_SCREEN
-import com.example.drivingschool76.utils.SEARCH_SCREEN
 import com.example.drivingschool76.utils.SharedPreferenceHelper
 import com.example.drivingschool76.utils.UserInfoCar
 import com.google.accompanist.pager.HorizontalPager
@@ -194,6 +200,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.abs
 
 @Composable
@@ -436,7 +447,12 @@ fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boole
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.primary)),
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.secondary,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    ),
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -778,7 +794,14 @@ fun TicketButton(
     ) {
         Box(
             modifier = Modifier
-                .background(Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.primary)))
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.secondary,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    )
+                )
                 .padding(vertical = 20.dp, horizontal = 30.dp)
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -801,7 +824,10 @@ fun RoundedRectangle() {
             .height(250.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp), clip = true)
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)), RoundedCornerShape(16.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                RoundedCornerShape(16.dp)
+            )
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Image(
@@ -868,7 +894,10 @@ fun ShuffleAnswersRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface), shape = RoundedCornerShape(4.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = RoundedCornerShape(4.dp)
+            )
             .clickable {
                 onShuffleClicked()
                 isShuffled = !isShuffled
@@ -1012,7 +1041,10 @@ fun CustomDropdownMenu(
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(color = MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(8.dp))
+                .background(
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
         ) {
             OutlinedTextField(
@@ -1158,7 +1190,10 @@ fun CustomDropdownMenuForMiddleName(
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(color = MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(8.dp))
+                .background(
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
         ) {
             OutlinedTextField(
@@ -1415,7 +1450,10 @@ fun ThemeChangeSwitch(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface), shape = RoundedCornerShape(4.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = RoundedCornerShape(4.dp)
+            )
             .clickable {
                 isNightMode = !isNightMode
                 preferenceHelper.saveSwitchState(context, key, isNightMode)
@@ -1540,7 +1578,11 @@ fun DisplayContent(content: PlacemarkContent) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            RoundedCornerShape(16.dp)
+                        )
                 ) {
                     Column(
                         modifier = Modifier
@@ -1621,7 +1663,11 @@ fun DisplayContent(content: PlacemarkContent) {
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 10.dp)
-                            .border(2.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(16.dp)),
+                            .border(
+                                2.dp,
+                                MaterialTheme.colorScheme.onSurface,
+                                RoundedCornerShape(16.dp)
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -1690,7 +1736,11 @@ fun ImageCarousel(imageUrls: List<String>) {
                     scaleY = scale
                 }
                 .shadow(4.dp, RoundedCornerShape(10.dp))
-                .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    RoundedCornerShape(10.dp)
+                )
                 .clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(4.dp)
@@ -1867,9 +1917,9 @@ fun CustomBottomBar(
             BottomBarItem(
                 icon = Icons.Default.Chat,
                 label = "Чат",
-                isSelected = currentRoute == SEARCH_SCREEN,
+                isSelected = currentRoute == CHAT_SCREEN,
                 onClick = {
-                    navController.navigate(SEARCH_SCREEN)
+                    navController.navigate(CHAT_SCREEN)
                 }
             )
             BottomBarItem(
@@ -1966,7 +2016,7 @@ fun ManagerBottomBar(
                 icon = Icons.Default.Search,
                 label = "Поиск",
                 isSelected = currentRoute == NavigationDestination.SearchScreenDestination.destination,
-                onClick = { navController.navigate(SEARCH_SCREEN) }
+                onClick = { navController.navigate(CHAT_SCREEN) }
             )
             BottomBarItem(
                 icon = Icons.Default.Notifications,
@@ -2260,7 +2310,7 @@ fun CarBrandInput(viewModel: CarInformationViewModel = viewModel()) {
     OutlinedTextField(
         value = text,
         onValueChange = { viewModel.carBrand.value = it },
-        label = { Text("Введите марку машины") },
+        label = { Text("Введите марку транспорта") },
         singleLine = true,
         isError = uiState.brandError,
         textStyle = TextStyle(fontSize = 24.sp),
@@ -2269,7 +2319,7 @@ fun CarBrandInput(viewModel: CarInformationViewModel = viewModel()) {
             .padding(6.dp)
     )
     if (uiState.brandError) {
-        Text("Вы не ввели марку машины", color = MaterialTheme.colorScheme.error, fontSize = 24.sp)
+        Text("Вы не ввели марку транспорта", color = MaterialTheme.colorScheme.error, fontSize = 24.sp)
     }
 }
 
@@ -2281,7 +2331,7 @@ fun CarModelInput(viewModel: CarInformationViewModel = viewModel()) {
     OutlinedTextField(
         value = text,
         onValueChange = { viewModel.carModel.value = it },
-        label = { Text("Введите модель машины") },
+        label = { Text("Введите модель транспорта") },
         singleLine = true,
         isError = uiState.modelError,
         textStyle = TextStyle(fontSize = 24.sp),
@@ -2290,7 +2340,7 @@ fun CarModelInput(viewModel: CarInformationViewModel = viewModel()) {
             .padding(6.dp)
     )
     if (uiState.modelError) {
-        Text("Вы не ввели модель машины", color = MaterialTheme.colorScheme.error, fontSize = 24.sp)
+        Text("Вы не ввели модель транспорта", color = MaterialTheme.colorScheme.error, fontSize = 24.sp)
     }
 }
 
@@ -2324,7 +2374,11 @@ fun ConfirmationButton(viewModel: CarInformationViewModel, scope: CoroutineScope
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(7.dp))
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.onSurface,
+                                shape = RoundedCornerShape(7.dp)
+                            )
                             .padding(8.dp)
                     ) {
                         Text(
@@ -2357,7 +2411,11 @@ fun ConfirmationButton(viewModel: CarInformationViewModel, scope: CoroutineScope
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(6.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                         .background(Transparent),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
@@ -2375,7 +2433,11 @@ fun ConfirmationButton(viewModel: CarInformationViewModel, scope: CoroutineScope
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(6.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.error, shape = RoundedCornerShape(16.dp))
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.error,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                         .background(Transparent),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
@@ -2423,7 +2485,11 @@ fun ImagePicker() {
 
     Box(
         modifier = Modifier
-            .border(2.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
+            .border(
+                2.dp,
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                RoundedCornerShape(4.dp)
+            )
             .padding(16.dp)
             .height(IntrinsicSize.Min)
     ) {
@@ -2561,7 +2627,10 @@ fun AdCard(
             }
             .indication(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(bounded = true, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                indication = rememberRipple(
+                    bounded = true,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
             ),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(8.dp)
@@ -2669,7 +2738,10 @@ fun ExpandableBox(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface), shape = RoundedCornerShape(16.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = RoundedCornerShape(16.dp)
+            )
             .clip(RoundedCornerShape(16.dp))
             .background(
                 if (!expanded) Brush.verticalGradient(
@@ -2688,7 +2760,10 @@ fun ExpandableBox(
             )
             .clickable(
                 onClick = { expanded = !expanded },
-                indication = rememberRipple(bounded = true, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                indication = rememberRipple(
+                    bounded = true,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                ),
                 interactionSource = remember { MutableInteractionSource() }
             )
             .animateContentSize()
@@ -2710,7 +2785,10 @@ fun ExpandableBoxForCatB() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface), shape = RoundedCornerShape(16.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = RoundedCornerShape(16.dp)
+            )
             .clip(RoundedCornerShape(16.dp))
             .animateContentSize()
             .padding(16.dp),
@@ -2795,16 +2873,16 @@ fun ExpandableBoxForCatB() {
 @Composable
 fun ChatListItem(
     chatMessage: ChatMessage,
-    onClick: (String) -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 16.dp)
-            .clickable { onClick(chatMessage.chatId) },
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Image(
             painter = rememberAsyncImagePainter(chatMessage.avatar),
             contentDescription = "User Avatar",
@@ -2840,10 +2918,13 @@ fun ChatListItem(
     }
 }
 
+
+
+
 //For List_Teah Instructor
 
 @Composable
-fun UserListItem(user: UserInfoCar, onClick: () -> Unit) {
+fun UserListItem(user: UserInfoCar, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -2875,7 +2956,7 @@ fun UserListItem(user: UserInfoCar, onClick: () -> Unit) {
 
 @Composable
 fun UserDetailDialog(user: UserInfoCar, onDismiss: () -> Unit, onNavigateToChat: () -> Unit) {
-    Dialog(onDismissRequest = { onDismiss() }) {
+    AlertDialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.background,
@@ -2925,6 +3006,423 @@ fun UserDetailDialog(user: UserInfoCar, onDismiss: () -> Unit, onNavigateToChat:
         }
     }
 }
+
+
+//For Calendar Instructor
+@Composable
+fun PeopleList(dailyAppointments: List<DailyAppointments>, navController: NavController) {
+    LazyColumn {
+        items(dailyAppointments) { daily ->
+            Text(
+                text = "Дата: ${daily.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))}",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
+            )
+            daily.appointments.forEach { appointment ->
+                var showDetails by remember { mutableStateOf(false) }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDetails = true }
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(appointment.imageUrl),
+                        contentDescription = "User Image",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color.LightGray, CircleShape)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = appointment.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = "Время: ${appointment.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+
+                if (showDetails) {
+                    PersonDetailsDialog(
+                        appointment = appointment,
+                        navController = navController,
+                        onClose = { showDetails = false }
+                    )
+                }
+                Divider(color = Color.Gray, thickness = 0.5.dp)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+@Composable
+fun DateRangePicker(
+    startDate: LocalDate,
+    endDate: LocalDate,
+    onDateSelected: (LocalDate, LocalDate) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        DatePickerButton(
+            label = "Начало: $startDate",
+            date = startDate,
+            onDateChange = { newStartDate ->
+                if (newStartDate <= endDate) {
+                    onDateSelected(newStartDate, endDate)
+                } else {
+                    onDateSelected(newStartDate, newStartDate)
+                }
+            }
+        )
+        DatePickerButton(
+            label = "Конец списка: $endDate",
+            date = endDate,
+            onDateChange = { newEndDate ->
+                if (newEndDate >= startDate) {
+                    onDateSelected(startDate, newEndDate)
+                } else {
+                    onDateSelected(startDate, startDate)
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun DatePickerButton(label: String, date: LocalDate, onDateChange: (LocalDate) -> Unit) {
+    val context = LocalContext.current
+    Button(onClick = {
+        showDatePicker(context, date) { onDateChange(it) }
+    }) {
+        Text(label)
+    }
+}
+
+fun showDatePicker(context: Context, date: LocalDate, onDateSelected: (LocalDate) -> Unit) {
+    val listener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+        onDateSelected(LocalDate.of(year, monthOfYear + 1, dayOfMonth))
+    }
+    val datePickerDialog = DatePickerDialog(
+        context,
+        listener,
+        date.year,
+        date.monthValue - 1,
+        date.dayOfMonth
+    )
+    datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+    val maxDateCalendar = Calendar.getInstance().apply {
+        add(Calendar.MONTH, 3)
+    }
+    datePickerDialog.datePicker.maxDate = maxDateCalendar.timeInMillis
+    datePickerDialog.show()
+}
+
+@Composable
+fun PersonDetailsDialog(appointment: Appointment, navController: NavController, onClose: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onClose,
+        confirmButton = {
+            Button(onClick = { navController.navigate("view_chat_screen/${appointment.id}") }) {
+                Text("Перейти в чат")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onClose,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = DarkRedColor,
+                    containerColor = Transparent
+                ),
+                border = BorderStroke(1.dp, DarkRedColor)
+            ) {
+                Text("Закрыть")
+            }
+        },
+        title = {
+            Text(
+                text = "Подробная информация",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 16.dp)
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(appointment.imageUrl),
+                    contentDescription = "User Image",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clip(CircleShape)
+                        .border(1.dp, Color.LightGray, CircleShape)
+                )
+                Text(
+                    text = "Имя: ${appointment.name}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = "Телефон: ${appointment.phone}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = "Email: ${appointment.email}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        modifier = Modifier.padding(16.dp)
+    )
+}
+
+
+
+// For instructor classe's today
+@Composable
+fun AppointmentItem(appointment: Appointment, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(appointment.imageUrl),
+            contentDescription = "User Image",
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape)
+                .border(1.dp, Color.LightGray, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Text(
+                text = appointment.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "Время: ${appointment.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+    Divider(color = Color.Gray, thickness = 0.5.dp)
+}
+
+
+
+
+//User Screen's  Classe's Screen
+
+@Composable
+fun DateSelectionButton(
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit
+) {
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+    calendar.time = java.util.Date.from(selectedDate.atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant())
+
+    Button(onClick = {
+        DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                onDateSelected(LocalDate.of(year, month + 1, dayOfMonth))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.minDate = System.currentTimeMillis()
+            datePicker.maxDate = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 90 // 3 months
+        }.show()
+    }) {
+        Text("Выберите дату: ${selectedDate.format(DateTimeFormatter.ofPattern("dd.MM.yy"))}")
+    }
+}
+
+@Composable
+fun DateColumn(
+    date: LocalDate,
+    slots: List<DatePickerClass>,
+    onSlotSelected: (DatePickerClass, Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        modifier = modifier
+            .padding(8.dp)
+            .width(250.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = getColorForDay(date),
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = date.format(DateTimeFormatter.ofPattern("dd.MM.yy")),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = date.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale("ru")),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            slots.forEach { slot ->
+                TimeSlotRow(
+                    slot = slot,
+                    onCheckedChange = { isSelected ->
+                        onSlotSelected(slot, isSelected)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TimeSlotRow(
+    slot: DatePickerClass,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(4.dp)
+    ) {
+        Checkbox(
+            checked = slot.isSelected,
+            onCheckedChange = onCheckedChange
+        )
+        Text(
+            text = "${slot.startTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${slot.endTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Composable
+fun ConfirmationDialog(
+    selectedSlots: List<DatePickerClass>,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Подтвердите ваш выбор:") },
+        text = {
+            LazyColumn {
+                items(selectedSlots) { slot ->
+                    Column {
+                        Text(text = "${slot.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}:\nВремя: ${slot.startTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${slot.endTime.format(DateTimeFormatter.ofPattern("HH:mm"))}")
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = onConfirm) {
+                Text("Подтвердить выбор")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = DarkRedColor,
+                    containerColor = Transparent
+                ),
+                border = BorderStroke(1.dp, DarkRedColor)
+            ) {
+                Text("Изменить выбор")
+            }
+        }
+    )
+}
+
+@Composable
+fun ConfirmedAppointmentsList(confirmedAppointments: Map<LocalDate, List<DatePickerClass>>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        confirmedAppointments.forEach { (date, slots) ->
+            Text(
+                text = "Дата: ${date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            slots.forEach { slot ->
+                Text(
+                    text = "Время: ${slot.startTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${slot.endTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+fun generateDates(startDate: LocalDate): List<LocalDate> {
+    return (0..14).map { startDate.plusDays(it.toLong()) }
+}
+
+fun createTimeSlots(dates: List<LocalDate>): List<DatePickerClass> {
+    return dates.flatMap { date ->
+        listOf(
+            DatePickerClass(LocalTime.of(8, 0), LocalTime.of(9, 30), date),
+            DatePickerClass(LocalTime.of(9, 30), LocalTime.of(11, 0), date),
+            DatePickerClass(LocalTime.of(11, 0), LocalTime.of(12, 30), date),
+            DatePickerClass(LocalTime.of(13, 0), LocalTime.of(14, 30), date),
+            DatePickerClass(LocalTime.of(14, 30), LocalTime.of(16, 0), date),
+            DatePickerClass(LocalTime.of(16, 0), LocalTime.of(17, 30), date),
+            DatePickerClass(LocalTime.of(17, 30), LocalTime.of(19, 0), date),
+            DatePickerClass(LocalTime.of(19, 0), LocalTime.of(20, 30), date)
+        )
+    }
+}
+
+fun getColorForDay(date: LocalDate): Color {
+    return when (date.dayOfWeek) {
+        java.time.DayOfWeek.SATURDAY, java.time.DayOfWeek.SUNDAY -> Color(0xFFFFCDD2)
+        else -> Color(0xFFB2DFDB)
+    }
+}
+
+
 
 
 

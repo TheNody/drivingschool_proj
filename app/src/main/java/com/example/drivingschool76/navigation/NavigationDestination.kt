@@ -5,6 +5,7 @@ import com.example.drivingschool76.utils.ACCOUNT_SCREEN
 import com.example.drivingschool76.utils.CALENDAR_INSTRUCTOR_DESTINATION_SCREEN
 import com.example.drivingschool76.utils.CATEGORYB_AUTH
 import com.example.drivingschool76.utils.CATEGORYB_MECH
+import com.example.drivingschool76.utils.CHAT_SCREEN
 import com.example.drivingschool76.utils.HOME_SCREEN
 import com.example.drivingschool76.utils.INFORMATION_ABOUT_CAR_SCREEN
 import com.example.drivingschool76.utils.LOGIN_SCREEN
@@ -16,7 +17,6 @@ import com.example.drivingschool76.utils.MOTORCYCLE
 import com.example.drivingschool76.utils.NOTIFICATION_SCREEN
 import com.example.drivingschool76.utils.PROFILES_STUDENTS_INSTRUCTOR_SCREEN
 import com.example.drivingschool76.utils.REGISTER_SCREEN
-import com.example.drivingschool76.utils.SEARCH_SCREEN
 import com.example.drivingschool76.utils.SETTINGS_SCREEN
 import com.example.drivingschool76.utils.SHOPPINGCART_SCREEN
 import com.example.drivingschool76.utils.TERMS_SCREEN
@@ -26,7 +26,7 @@ sealed class NavigationDestination (val destination: String){
     data object RegistrationScreenDestination:NavigationDestination(REGISTER_SCREEN)
     data object HomeScreenDestination:NavigationDestination(HOME_SCREEN)
     data object AccountScreenDestination:NavigationDestination(ACCOUNT_SCREEN)
-    data object SearchScreenDestination:NavigationDestination(SEARCH_SCREEN)
+    data object SearchScreenDestination:NavigationDestination(CHAT_SCREEN)
     data object SettingsScreenDestination:NavigationDestination(SETTINGS_SCREEN)
     data object TermsScreenDestination:NavigationDestination(TERMS_SCREEN)
     data object MapScreenDestination:NavigationDestination(MAP_SCREEN)

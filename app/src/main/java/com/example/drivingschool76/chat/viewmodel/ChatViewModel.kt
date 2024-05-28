@@ -52,7 +52,7 @@ class ChatViewModel : ViewModel() {
             timestamp = currentTime,
             message = message,
             chatId = chatId,
-            isCurrentUser = true  // Предполагаем, что сообщение отправлено текущим пользователем
+            isCurrentUser = true
         )
         _messages.value += newMessage
     }

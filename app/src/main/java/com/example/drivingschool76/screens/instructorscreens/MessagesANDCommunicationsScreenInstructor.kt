@@ -2,7 +2,9 @@
 
 package com.example.drivingschool76.screens.instructorscreens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -62,6 +64,7 @@ fun MessagesANDCommunicationsScreenInstructor(
     val isCollapsed = remember { mutableStateOf(false) }
     val isGeneralChatsCollapsed = remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
+    val selectedChatId = remember { mutableStateOf<String?>(null) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -140,8 +143,13 @@ fun MessagesANDCommunicationsScreenInstructor(
                             ChatListItem(
                                 chatMessage = message,
                                 onClick = {
+                                    selectedChatId.value = message.chatId
                                     navController.navigate("view_chat_screen/${message.chatId}")
-                                }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(if (selectedChatId.value == message.chatId) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else Color.Transparent)
+                                    .animateContentSize()
                             )
                             Divider(color = Color.Gray, thickness = 0.5.dp)
                         }
@@ -184,8 +192,13 @@ fun MessagesANDCommunicationsScreenInstructor(
                             ChatListItem(
                                 chatMessage = message,
                                 onClick = {
+                                    selectedChatId.value = message.chatId
                                     navController.navigate("view_chat_screen/${message.chatId}")
-                                }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(if (selectedChatId.value == message.chatId) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else Color.Transparent)
+                                    .animateContentSize()
                             )
                             Divider(color = Color.Gray, thickness = 0.5.dp)
                         }
@@ -195,6 +208,7 @@ fun MessagesANDCommunicationsScreenInstructor(
         }
     }
 }
+
 
 
 

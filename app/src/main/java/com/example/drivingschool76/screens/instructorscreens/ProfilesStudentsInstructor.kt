@@ -1,7 +1,11 @@
 package com.example.drivingschool76.screens.instructorscreens
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -50,7 +54,6 @@ fun ProfilesStudentsInstructorScreen(
     val users by searchViewModel.users.collectAsState()
     val selectedUser = remember { mutableStateOf<UserInfoCar?>(null) }
 
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -87,13 +90,23 @@ fun ProfilesStudentsInstructorScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                LazyColumn(
-                    contentPadding = PaddingValues(16.dp)
-                ) {
+                LazyColumn {
                     items(users) { user ->
-                        UserListItem(user = user) {
-                            selectedUser.value = user
-                        }
+                        UserListItem(
+                            user = user,
+                            onClick = {
+                                selectedUser.value = user
+                            },
+                            modifier = Modifier
+                                .clickable {
+                                    selectedUser.value = user
+                                }
+                                .indication(
+                                    indication = LocalIndication.current,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                )
+                                .animateContentSize()
+                        )
                         Divider(color = Color.Gray, thickness = 0.5.dp, modifier = Modifier.fillMaxWidth())
                     }
                 }
@@ -106,4 +119,5 @@ fun ProfilesStudentsInstructorScreen(
         }
     }
 }
+
 

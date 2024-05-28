@@ -34,8 +34,8 @@ import com.example.drivingschool76.chat.component.CustomBottomBar
 import com.example.drivingschool76.chat.viewmodel.ChatViewModel
 import com.example.drivingschool76.data.viewmodel.LoginViewModel
 import com.example.drivingschool76.data.viewmodel.UserRoleState
+import com.example.drivingschool76.utils.CHAT_SCREEN
 import com.example.drivingschool76.utils.MESSAGES_AND_COMMUNICATION_INSTRUCTOR_SCREEN
-import com.example.drivingschool76.utils.SEARCH_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,7 +56,7 @@ fun ViewChatScreen(
                         IconButton(onClick = {
                             when (loginViewModel.userStateRole.value) {
                                 UserRoleState.Instructor -> navController.navigate(MESSAGES_AND_COMMUNICATION_INSTRUCTOR_SCREEN)
-                                UserRoleState.User -> navController.navigate(SEARCH_SCREEN)
+                                UserRoleState.User -> navController.navigate(CHAT_SCREEN)
                                 UserRoleState.Manager -> {/* Добавить навигацию для Manager */}
                                 else -> {}
                             }

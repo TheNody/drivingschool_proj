@@ -24,7 +24,7 @@ import com.example.drivingschool76.components.ManagerBottomBar
 import com.example.drivingschool76.components.NavDrawer
 import com.example.drivingschool76.data.viewmodel.LoginViewModel
 import com.example.drivingschool76.data.viewmodel.UserRoleState
-import com.example.drivingschool76.utils.SEARCH_SCREEN
+import com.example.drivingschool76.utils.CHAT_SCREEN
 import kotlinx.coroutines.launch
 
 @Composable
@@ -77,7 +77,7 @@ fun ChatScreen(
             ) {
                 Text(
                     modifier = modifier.align(alignment = Alignment.Center),
-                    text = SEARCH_SCREEN
+                    text = CHAT_SCREEN
                 )
             }
         }

@@ -29,7 +29,7 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="notification">Уведомления</string>
     <string name="mainScreenInstructor">Предстоящие занятия</string>
-    <string name="сalendar_or_schedule">Расписание</string>
+    <string name="calendar_or_schedule">Расписание</string>
     <string name="profile_students">Список обучающихся</string>
     <string name="information_car">О транспорте</string>
     <string name="shopping_subscription">Купить подписку</string>
